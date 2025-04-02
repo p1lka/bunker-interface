@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бункер: Катастрофа</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            background-color: transparent;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+        }
+        
+        /* Основные блоки */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .catastrophe-block {
+            width: 45%;
+        }
+        
+        .bunker-block {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .catastrophe-title {
+            color: #e74c3c;
+        }
+        
+        .bunker-title {
+            color: gold;
+        }
+        
+        .inventory-title {
+            color: #33FFF5;
+            margin-top: 15px;
+        }
+        
+        .description {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 4px;
+            line-height: 1.4;
+        }
+        
+        /* Контейнер для всех рамок */
+        .frames-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        
+        /* Остальные стили остаются без изменений */
+        .frame-row {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .overlay {
+            width: 460px;
+            height: 260px;
+            color: white;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        
+         .name {
+            background: gold;
+            color: black;
+            padding: 5px 15px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            margin: 5px;
+            border-radius: 3px;
+        }
+        .info {
+            display: flex;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 3px;
+        }
+        .info div {
+            background: gold;
+            color: black;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 0 15px 5px 15px;
+            margin-top: auto;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            min-height: 16px;
+        }
+        .stat-item {
+            font-size: 11px;
+            padding: 1px 3px;
+            line-height: 1.2;
+        }
+        .left-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 10px;
+        }
+        .right-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .profession { color: #FF5733; }
+        .health { color: #33FF57; }
+        .hobby { color: #3380FF; }
+        .phobia { color: #FF33F3; }
+        .fact { color: #FF33A1; }
+        .luggage { color: #33FFF5; }
+        .border-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid gold;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .corner-dots {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: gold;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .corner-dots.tl { top: -3px; left: -3px; }
+        .corner-dots.tr { top: -3px; right: -3px; }
+        .corner-dots.bl { bottom: -3px; left: -3px; }
+        .corner-dots.br { bottom: -3px; right: -3px; }
+        .camera-area {
+            flex-grow: 1;
+            margin: 2px 15px 5px 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Новый верхний блок -->
+    <div class="header">
+        <div class="catastrophe-block">
+            <div class="section-title catastrophe-title">КАТАСТРОФА</div>
+            <div class="description">
+                [Описание катастрофы]
+            </div>
+        </div>
+        
+        <div class="bunker-block">
+            <div>
+                <div class="section-title bunker-title">ИНФОРМАЦИЯ О БУНКЕРЕ</div>
+                <div class="description">
+                    [Описание бункера]
+                </div>
+            </div>
+            
+            <div>
+                <div class="section-title inventory-title">ИНВЕНТАРЬ БУНКЕРА</div>
+                <div class="description">
+                    [Список инвентаря]
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Рамки персонажей -->
+    <div class="frames-container">
+        <!-- Первая строка из 4 рамок -->
+        <div class="frame-row">
+            <!-- Рамка 1 -->
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 1</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 2</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 3</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 4</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Вторая строка из 4 рамок -->
+        <div class="frame-row">
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 5</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 6</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 7</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 8</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Третья строка из 4 рамок -->
+        <div class="frame-row">
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 9</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 10</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 11</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay">
+                <div class="border-frame">
+                    <div class="corner-dots tl"></div>
+                    <div class="corner-dots tr"></div>
+                    <div class="corner-dots bl"></div>
+                    <div class="corner-dots br"></div>
+                </div>
+                <div class="name">Персонаж 12</div>
+                <div class="info">
+                    <div>Пол</div>
+                    <div>Возраст</div>
+                </div>
+                <div class="camera-area"></div>
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <div class="left-stats">
+                            <div class="stat-item profession"><strong>Профессия:</strong> ???</div>
+                            <div class="stat-item health"><strong>Здоровье:</strong> ???</div>
+                            <div class="stat-item hobby"><strong>Хобби:</strong> ???</div>
+                            <div class="stat-item phobia"><strong>Фобия:</strong> ???</div>
+                        </div>
+                        <div class="right-stats">
+                            <div class="stat-item fact"><strong>Факт 1:</strong> ???</div>
+                            <div class="stat-item fact"><strong>Факт 2:</strong> ???</div>
+                            <div class="stat-item luggage"><strong>Багаж:</strong> ???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
